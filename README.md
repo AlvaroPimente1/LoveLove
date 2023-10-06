@@ -7,4 +7,3 @@
 - 💌 Compartilhar mensagens e recados amorosos.
 - 📅 Planejar nossos encontros e datas especiais.
 - 📸 Compartilhar nossos momentos favoritos em uma galeria privada.
-- ... e muito mais!
