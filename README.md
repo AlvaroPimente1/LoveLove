@@ -2,7 +2,7 @@
 
 ## Sobre o Aplicativo 📱
 
-**LoveLove App** é um aplicativo especial, desenvolvido com muito amor e carinho por [Seu Nome] e [Nome da Sua Namorada]. Este aplicativo é um espaço onde podemos:
+**LoveLove App** é um aplicativo especial, desenvolvido com muito amor e carinho. Este aplicativo é um espaço onde você e a sua bela dama podem:
 
 - 💌 Compartilhar mensagens e recados amorosos.
 - 📅 Planejar nossos encontros e datas especiais.
