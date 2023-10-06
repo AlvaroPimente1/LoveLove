@@ -1,4 +1,4 @@
-# LoveLove App 💖
+# LoveLove App 💖 (🚧Em desenvolvimento🚧)
 
 ## Sobre o Aplicativo 📱
 
