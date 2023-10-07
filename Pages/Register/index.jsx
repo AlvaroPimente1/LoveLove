@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
-import { StatusBar ,TextInput, View, Text, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Image } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { StatusBar, TextInput, View, Text, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Image, Alert } from 'react-native';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import styles from './styles';
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { FirebaseSetup } from '../../services/firebase/firebase';
+import getUserID from '../../services/firebase/userID';
 
-export default function Login({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+export default function Register({ navigation }) {
+    const [ nome, setNome ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+
     const [error, setError] = useState('');
 
-    async function Login(){
+    const db = getFirestore(FirebaseSetup)
+
+    async function handleSignUp(){
         try {
             const auth = getAuth(FirebaseSetup);
-            await signInWithEmailAndPassword(auth, email, password)
-            navigation.navigate('Drawer')
+            await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "usuarios", getUserID()), {
+                nome: nome,
+                email: email,
+            });
+            Alert.alert('Concluído', 'Usuário criado com sucesso!')
+            navigation.navigate('Login');
             setEmail('');
             setPassword('');
         } catch (e) {
             setError(e.message);
+        }finally{
+            await setDoc(doc(db, "usuarios", getUserID()), {
+                nome: nome,
+                email: email,
+            });
         }
     };
 
@@ -42,33 +58,46 @@ export default function Login({ navigation }) {
                         <View>
                             <TextInput
                                 style={styles.input}
+                                placeholder={'Insira seu nome'}
+                                placeholderTextColor={"#ff62a5"}
+                                value={nome}
+                                onChangeText={setNome}
+                            />
+                            <TextInput
+                                style={styles.input}
                                 placeholder={'Insira seu e-mail'}
                                 placeholderTextColor={"#ff62a5"}
-                                KeyboardAvoidingView="enable"
+                                keyboardType="email-address"
                                 value={email}
                                 onChangeText={setEmail}
                             />
                             <TextInput
                                 style={styles.input}
-                                placeholder={'Insira sua senha'}
+                                placeholder={'Crie uma senha'}
                                 placeholderTextColor={"#ff62a5"}
-                                KeyboardAvoidingView="enable"
                                 secureTextEntry={true}
                                 value={password}
                                 onChangeText={setPassword}
                             />
+                            {error ? 
+                            <View style={{ backgroundColor: '#ff0000', paddingHorizontal: 5, paddingVertical: 5, borderRadius: 20 }}>
+                                <Text style={{color: '#fff'}}>{error}</Text> 
+                            </View>
+                            
+                            : null}
                         </View>
-                        {error ? <Text style={{color: 'red'}}>{error}</Text> : null}
+
                         <TouchableOpacity
                             style={styles.botao}
-                            onPress={Login}
+                            onPress={handleSignUp}
                         >
-                            <Text style={styles.textoBotao}>Entrar</Text>
+                            <Text style={styles.textoBotao}>Cadastrar</Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Register')}
+                            onPress={() => navigation.navigate('Login')}
                         >
-                            <Text style={styles.textoMenor}>Ainda não tem conta? se cadastre!</Text>
+                            <Text style={styles.textoMenor}>Já tem conta? Faça Login</Text>
                         </TouchableOpacity>
                     </View>
                 </TouchableWithoutFeedback>
